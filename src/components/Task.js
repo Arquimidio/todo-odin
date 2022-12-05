@@ -1,17 +1,15 @@
 export default class Task {
     constructor(
-        title, 
-        description, 
+        title,  
         dueDate, 
-        priority, 
-        notes = null, 
+        priority = 0, 
+        description,
         isComplete = false
     ) {
         this.title = title;
-        this.description = description;
         this.dueDate = dueDate;
-        this.priority = priority;
-        this.notes = notes;
+        this.priority = priority > 3? 3 : priority;
+        this.description = description;
         this.isComplete = isComplete;
     }
 }
