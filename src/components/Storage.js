@@ -32,11 +32,12 @@ export default class Storage {
             .includes(name);
     }
 
-    // Returns the projects list with all the todos inside, everything already parsed
+    // Returns the todos item from the localStorage
     static getTodos() {
         return JSON.parse(localStorage.getItem('todos'));
     }
 
+    // Returns all the projects from the localstorage
     static getProjects() {
         return this.getTodos().projects;
     }
