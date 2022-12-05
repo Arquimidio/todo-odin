@@ -5,7 +5,9 @@ import {
     isToday
  } from "date-fns";
 
-const DEFAULT_PROJECTS = ['all', 'daily', 'weekly'];
+const TODAY_NAME = 'Today';
+const WEEK_NAME = 'This week';
+const DEFAULT_PROJECTS = ['all', TODAY_NAME, WEEK_NAME];
 
 // A Storage object formatted to receive projects and their todo tasks
 class TodoStorage {
@@ -106,6 +108,17 @@ export default class Storage {
         }
     }
 
+    // Adds a task to Today project or Week Project if the due data matches
+    static _addByDueDate(task) {
+        if(this._isDueToday(task)) {
+            this.add(task, TODAY_NAME);     
+        }
+
+        if(this._isDueThisWeek(task)) {
+            this.add(task, WEEK_NAME);
+        }
+    }
+
     // Adds a new project or task to the storage
     static add(data, targetProject = null) {
         const currentProjects = this.getProjects();
@@ -120,5 +133,7 @@ export default class Storage {
         return currentProjects;
     }
 
-    static editTask
+    static edit(task) {
+
+    }
 }
