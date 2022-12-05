@@ -51,23 +51,31 @@ export default class Storage {
         }
     }
 
+    static _addProject(curProjects, project) {
+        if(!this._projectAlreadyExists(project.name)) {
+            curProjects.push(project);
+        }
+    }
+
+    static _addTask(curProjects, task, targetProject) {
+        const targetProjectObj = curProjects.find(project => project.name === targetProject);
+        const [ allTodos ] = curProjects;
+
+        if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
+            targetProjectObj.tasks.push(task);
+        }
+
+        allTodos.tasks.push(data);
+    }
+
     // Adds a new project or task to the storage
     static add(data, targetProject = null) {
         const currentProjects = this.getProjects();
 
         if(data instanceof Project) {
-            if(!this._projectAlreadyExists(data.name)) {
-                currentProjects.push(data);
-            }
+            this._addProject(currentProjects, data);
         } else if(data instanceof Task) {
-            const targetProjectObj = currentProjects.find(project => project.name === targetProject);
-            const [ allTodos ] = currentProjects;
-
-            if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
-                targetProjectObj.tasks.push(data);
-            }
-
-            allTodos.tasks.push(data);
+            this._addTask(currentProjects, data, targetProject);
         }
 
         this._setProjects(currentProjects);
