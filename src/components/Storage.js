@@ -1,7 +1,14 @@
+import { 
+    differenceInWeeks,
+    isToday
+} from "date-fns";
 import Project from "./Project";
 import Task from "./Task";
 
-const DEFAULT_PROJECTS = ['all', 'daily', 'weekly'];
+
+const TODAY_NAME = 'Today';
+const WEEK_NAME = 'This week';
+const DEFAULT_PROJECTS = ['all', TODAY_NAME, WEEK_NAME];
 
 // A Storage object formatted to receive projects and their todo tasks
 class TodoStorage {
@@ -13,75 +20,33 @@ class TodoStorage {
 }
 
 export default class Storage {
-    // Sets the projects to a new TodoStorage
-    static _setProjects(projects) {
-        localStorage.setItem(
-            'todos',
-            JSON.stringify(new TodoStorage(projects))
+
+    static initStorage() {
+        
+    }
+    
+    static getProjects() {
+        const todos = localStorage.getItem('todos');
+        return JSON.parse(todos).projects;
+    }
+
+    static projectExists(
+        checkedProj, 
+        allProjects = this.getProjects()
+    ) {
+        return !!allProjects.find(
+            proj => proj.name === checkedProj.name
         )
     }
 
-    // Verifies if a project name is the same as the ones created by default
-    static _isForbiddenProject(name) {
-        return DEFAULT_PROJECTS.includes(name);
-    }
-
-    // Verifies if a project with the given name already exists
-    static _projectAlreadyExists(name) {
-        return this
-            .getProjects()
-            .map(proj => proj.name)
-            .includes(name);
-    }
-
-    // Returns the todos item from the localStorage
-    static getTodos() {
-        return JSON.parse(localStorage.getItem('todos'));
-    }
-
-    // Returns all the projects from the localstorage
-    static getProjects() {
-        return this.getTodos().projects;
-    }
-
-    // Creates the todo storage if it doesn't already exists
-    static initStorage() {
-        if (!this.getTodos()) {
-            this._setProjects();
+    static saveProject(newProject) {
+        const projects = this.getProjects();
+        if(!this.projectExists(newProject, projects)) {
+            projects.push(newProject);
+            localStorage.setItem(
+                'todo',
+                JSON.stringify(new TodoStorage(projects))
+            )
         }
-    }
-
-    // Adds a new project to the todos
-    static _addProject(curProjects, project) {
-        if(!this._projectAlreadyExists(project.name)) {
-            curProjects.push(project);
-        }
-    }
-
-    // Adds a new task to a specific project or just to the general todos project
-    static _addTask(curProjects, task, targetProj) {
-        const equalProjName = (proj) =>  proj.name === targetProj;
-        const targetProjectObj = curProjects.find(equalProjName);
-        const [ allTodos ] = curProjects;
-
-        if(targetProjectObj && !this._isForbiddenProject(targetProj)) {
-            targetProjectObj.tasks.push(task);
-        }
-
-        allTodos.tasks.push(task);
-    }
-
-    // Adds a new project or task to the storage
-    static add(data, targetProject = null) {
-        const currentProjects = this.getProjects();
-
-        if(data instanceof Project) {
-            this._addProject(currentProjects, data);
-        } else if(data instanceof Task) {
-            this._addTask(currentProjects, data, targetProject);
-        }
-
-        this._setProjects(currentProjects);
-        return currentProjects;
     }
 }
