@@ -20,17 +20,33 @@ class TodoStorage {
 }
 
 export default class Storage {
+
+    static initStorage() {
+        
+    }
+    
     static getProjects() {
         const todos = localStorage.getItem('todos');
         return JSON.parse(todos).projects;
     }
 
-    static saveProject(curProj) {
-        const projects = this.getProjects();
-
+    static projectExists(
+        checkedProj, 
+        allProjects = this.getProjects()
+    ) {
+        return !!allProjects.find(
+            proj => proj.name === checkedProj.name
+        )
     }
 
-    static initStorage() {
-
+    static saveProject(newProject) {
+        const projects = this.getProjects();
+        if(!this.projectExists(newProject, projects)) {
+            projects.push(newProject);
+            localStorage.setItem(
+                'todo',
+                JSON.stringify(new TodoStorage(projects))
+            )
+        }
     }
 }
