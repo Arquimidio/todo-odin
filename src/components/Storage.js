@@ -21,10 +21,12 @@ export default class Storage {
         )
     }
 
+    // Verifies if a project name is the same as the ones created by default
     static _isForbiddenProject(name) {
         return DEFAULT_PROJECTS.includes(name);
     }
 
+    // Verifies if a project with the given name already exists
     static _projectAlreadyExists(name) {
         return this
             .getProjects()
@@ -54,7 +56,6 @@ export default class Storage {
         const currentProjects = this.getProjects();
 
         if(data instanceof Project) {
-            console.log(this._projectAlreadyExists(data.name))
             if(!this._projectAlreadyExists(data.name)) {
                 currentProjects.push(data);
             }
