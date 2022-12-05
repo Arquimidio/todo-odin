@@ -51,21 +51,24 @@ export default class Storage {
         }
     }
 
+    // Adds a new project to the todos
     static _addProject(curProjects, project) {
         if(!this._projectAlreadyExists(project.name)) {
             curProjects.push(project);
         }
     }
 
-    static _addTask(curProjects, task, targetProject) {
-        const targetProjectObj = curProjects.find(project => project.name === targetProject);
+    // Adds a new task to a specific project or just to the general todos project
+    static _addTask(curProjects, task, targetProj) {
+        const equalProjName = (proj) =>  proj.name === targetProj;
+        const targetProjectObj = curProjects.find(equalProjName);
         const [ allTodos ] = curProjects;
 
-        if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
+        if(targetProjectObj && !this._isForbiddenProject(targetProj)) {
             targetProjectObj.tasks.push(task);
         }
 
-        allTodos.tasks.push(data);
+        allTodos.tasks.push(task);
     }
 
     // Adds a new project or task to the storage
