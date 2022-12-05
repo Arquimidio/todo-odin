@@ -1,5 +1,9 @@
 import Project from "./Project";
 import Task from "./Task";
+import { 
+    differenceInWeeks,
+    isToday
+ } from "date-fns";
 
 const DEFAULT_PROJECTS = ['all', 'daily', 'weekly'];
 
@@ -24,6 +28,36 @@ export default class Storage {
     // Verifies if a project name is the same as the ones created by default
     static _isForbiddenProject(name) {
         return DEFAULT_PROJECTS.includes(name);
+    }
+
+    // Verifies if a task with the given name already exists
+    static _taskAlreadyExists(curProjects, taskName) {
+        for(const project of curProjects) {
+            if(project.tasks.find(task => task.name === taskName)) {
+                return true;
+            }
+        }
+
+        return false
+    }
+
+    static _isDueToday({ dueDate }) {
+        if(dueDate) {
+            return isToday(
+                dueDate
+            )
+        }
+    }
+
+    static _isDueThisWeek({ dueDate }) {
+        if(dueDate) {
+            return differenceInWeeks(
+                dueDate,
+                new Date()
+            ) <= 1;
+        }
+
+        return false;
     }
 
     // Verifies if a project with the given name already exists
@@ -51,21 +85,25 @@ export default class Storage {
         }
     }
 
+    // Adds a project to the storage
     static _addProject(curProjects, project) {
         if(!this._projectAlreadyExists(project.name)) {
             curProjects.push(project);
         }
     }
 
+    // Adds a task to a project
     static _addTask(curProjects, task, targetProject) {
-        const targetProjectObj = curProjects.find(project => project.name === targetProject);
-        const [ allTodos ] = curProjects;
+        if(!this._taskAlreadyExists(curProjects, task)) {
+            const targetProjectObj = curProjects.find(project => project.name === targetProject);
+            const [ allTodos ] = curProjects;
 
-        if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
-            targetProjectObj.tasks.push(task);
+            if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
+                targetProjectObj.tasks.push(task);
+            }
+
+            allTodos.tasks.push(task);
         }
-
-        allTodos.tasks.push(data);
     }
 
     // Adds a new project or task to the storage
@@ -81,4 +119,6 @@ export default class Storage {
         this._setProjects(currentProjects);
         return currentProjects;
     }
+
+    static editTask
 }
