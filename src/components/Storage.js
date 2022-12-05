@@ -27,11 +27,6 @@ export default class Storage {
         )
     }
 
-    // Verifies if a project name is the same as the ones created by default
-    static _isForbiddenProject(name) {
-        return DEFAULT_PROJECTS.includes(name);
-    }
-
     // Verifies if a task with the given name already exists
     static _taskAlreadyExists(curProjects, taskName) {
         for(const project of curProjects) {
@@ -43,6 +38,7 @@ export default class Storage {
         return false
     }
 
+    // Verifies if the date from a task is the same as today
     static _isDueToday({ dueDate }) {
         if(dueDate) {
             return isToday(
@@ -51,6 +47,7 @@ export default class Storage {
         }
     }
 
+    // Verifies if the date from a task fits the current week
     static _isDueThisWeek({ dueDate }) {
         if(dueDate) {
             return differenceInWeeks(
@@ -97,10 +94,12 @@ export default class Storage {
     // Adds a task to a project
     static _addTask(curProjects, task, targetProject) {
         if(!this._taskAlreadyExists(curProjects, task)) {
-            const targetProjectObj = curProjects.find(project => project.name === targetProject);
             const [ allTodos ] = curProjects;
+            const targetProjectObj = curProjects.find(
+                project => project.name === targetProject
+            );
 
-            if(targetProjectObj && !this._isForbiddenProject(targetProject)) {
+            if(targetProjectObj) {
                 targetProjectObj.tasks.push(task);
             }
 
@@ -133,7 +132,16 @@ export default class Storage {
         return currentProjects;
     }
 
-    static edit(task) {
+    static _editTask(newTask) {
+        const currentProjects = this.getProjects();
 
+        for(const project of currentProjects) {
+
+        }
+    }
+
+    static changeDate(task, dueDate) {
+        task.dueDate = dueDate;
+        this._addByDueDate(task);
     }
 }
