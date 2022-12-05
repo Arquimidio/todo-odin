@@ -4,4 +4,4 @@ import Task from "./components/Task"
 
 Storage.initStorage();
 Storage.add(new Project('ElPires'));
-Storage.add(new Task('lol', '12121', 3, 'Raw data', false), 'ElPires');
+Storage.add(new Task('lol', '2022-12-05', 3, 'Raw data', false), 'ElPires');
