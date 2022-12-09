@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     devServer: {
-        static: './dist'
+        static: './dist',
+        open: true
     },
     optimization: {
         runtimeChunk: 'single'
@@ -16,7 +17,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'TODO'
+            inject: 'body'
         })
     ]
 }

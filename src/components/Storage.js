@@ -16,7 +16,11 @@ export default class Storage {
 
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
-        return JSON.parse(list);
+        const parsedList = JSON.parse(list);
+        const { projects } = parsedList;
+        parsedList.projects = projects
+            .map(proj => new Project(...Object.values(proj)));
+        return parsedList;
     }
 
     static setList(list = new ProjectList()) {
@@ -47,7 +51,7 @@ export default class Storage {
         const { projects } = this.getList();
         const targetProject = this.findByProp(projects, 'name', projectName);
         if(targetProject) {
-            targetProject.push(task);
+            targetProject.todo.push(task);
             this.setList(new ProjectList(projects));
         }
     }
