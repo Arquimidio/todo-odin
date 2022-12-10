@@ -17,10 +17,14 @@ export default class Storage {
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
         const parsedList = JSON.parse(list);
-        const { projects } = parsedList;
-        parsedList.projects = projects
-            .map(proj => new Project(...Object.values(proj)));
-        return parsedList;
+        if(parsedList) {
+            const { projects } = parsedList;
+            parsedList.projects = projects
+                .map(proj => new Project(...Object.values(proj)));
+            return parsedList;
+        }   
+        
+        return null;
     }
 
     static setList(list = new ProjectList()) {
@@ -38,7 +42,9 @@ export default class Storage {
     }
 
     static setProject(project) {
+        console.log('ratata')
         const { projects } = this.getList();
+        
         if(!this.findByProp(projects, 'name', project.name)) {
             projects.push(project);
             this.setList(new ProjectList(projects));
@@ -49,11 +55,25 @@ export default class Storage {
 
     static setTask(projectName, task) {
         const { projects } = this.getList();
-        const targetProject = this.findByProp(projects, 'name', projectName);
+        const targetProject = this.findByProp(
+            projects, 
+            'name', 
+            projectName
+        );
         if(targetProject) {
             targetProject.todo.push(task);
             this.setList(new ProjectList(projects));
         }
+    }
+
+    static getTasksFrom(projectName) {
+        const { projects } = this.getList();
+        const targetProject = this.findByProp(
+            projects, 
+            'name', 
+            projectName
+        );
+        return targetProject.todo;
     }
 
 }
