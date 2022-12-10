@@ -1,8 +1,8 @@
 import Task from './Task';
 import Storage from './Storage';
+import Memory from './Memory';
 
 export default class UserInterface {
-    static projectList;
     static newProjectName = document.getElementById('projects-new-name')
     static projectsAdder = document.getElementById('projects-adder');
     static projectsDisplay = document.getElementById('projects');
@@ -10,20 +10,19 @@ export default class UserInterface {
     static taskAdderContainer = document.getElementById('task-adder-container')
     static todoDisplay = document.getElementById('project-todos');
 
+    static clearChildren(element) {
+        element.innerHTML = '';
+    }
+
     static makeItem(text) {
         const item = document.createElement('li');
         item.textContent = text;
         return item;
     }
 
-    static updateProjectList(Storage) {
-        this.projectList = Storage.getList().projects;
-    }
-
-    static updateProjects(Storage) {
-        this.projectsDisplay.innerHTML = '';
-        this.updateProjectList(Storage);
-        this.initProjects();
+    static updateProjects() {
+        this.clearChildren(this.projectsDisplay);
+        this.initProjects(Memory);
     }
 
     static setSelectedDisplay(displayName) {
@@ -34,7 +33,7 @@ export default class UserInterface {
         event.preventDefault();
         const { value: projectName } = this.newProjectName; 
         Storage.setProject.call(Storage, new Project(projectName));
-        this.updateProjects(Storage);
+        this.updateProjects();
         event.target.reset();
     }
 
@@ -52,16 +51,18 @@ export default class UserInterface {
     static submitTask(projectName, event) {
         event.preventDefault();
         const { target: { firstChild: input } } = event;
-        Storage.setTask(projectName, new Task(input.value));
-        this.updateProjectList(Storage);
-        this.initAllTasks(Storage.getTasksFrom(projectName));
+        Memory.setTask(projectName, new Task(input.value));
+        this.initAllTasks(projectName);
     }
 
     static initTaskAdder(projectName) {
         this.removeTaskAdder();
         const adderForm = document.createElement('form');
         const adderInput = document.createElement('input');
-        adderForm.addEventListener('submit', this.submitTask.bind(this, projectName));
+        adderForm.addEventListener(
+            'submit', 
+            this.submitTask.bind(this, projectName)
+        );
         adderForm.append(adderInput);
         this.taskAdderContainer.append(adderForm);
     }
@@ -77,8 +78,8 @@ export default class UserInterface {
         this.projectsDisplay.append(listItem);
     }
 
-    static initProjects() {
-        this.projectList.forEach(
+    static initProjects(StorageModel) {
+        StorageModel.getProjects().forEach(
             this.initSingleProject.bind(this)
         );
     }
@@ -89,14 +90,16 @@ export default class UserInterface {
         this.todoDisplay.append(listItem);
     }   
 
-    static initAllTasks(todo) {
+    static initAllTasks(projectName) {
         this.clearTodoDisplay();
-        todo.forEach(this.initSingleTask.bind(this));
+        Memory
+            .getTasks(projectName)
+            .forEach(this.initSingleTask.bind(this));
     }
 
-    static showProject(project, todo) {
+    static showProject(project) {
         this.setSelectedDisplay(project);
-        this.initAllTasks(todo);
+        this.initAllTasks(project);
         this.initTaskAdder(project);
     }
 
@@ -107,8 +110,7 @@ export default class UserInterface {
     }
 
     static load(ProjectModel, StorageModel) {
-        this.updateProjectList(StorageModel);
         this.initProjectsAdder(ProjectModel, StorageModel);
-        this.initProjects();
+        this.initProjects(StorageModel);
     }
 }

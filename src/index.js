@@ -1,8 +1,11 @@
-import Storage from "./components/Storage";
+import Memory from "./components/Memory";
 import Project from "./components/Project";
 import UserInterface from "./components/UserInterface";
 
+window.addEventListener('beforeunload', () => {
+    Memory.saveToStorage();
+}, { capture: true })
+
 document.addEventListener('DOMContentLoaded', () => {
-    Storage.initialize();
-    UserInterface.load(Project, Storage);
+    UserInterface.load(Project, Memory);
 })
