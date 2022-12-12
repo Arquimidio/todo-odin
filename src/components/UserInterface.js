@@ -18,7 +18,10 @@ export default class UserInterface {
 
     static updateProjects(allProjects) {
         this.clearChildren(this.projectsDisplay);
-        this.initProjects(allProjects);
+
+        for(const project of allProjects) {
+            this.initProject(project.getName());
+        }
     }
 
     static setSelectedDisplay(displayName) {

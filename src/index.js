@@ -5,7 +5,7 @@ import UserInterface from "./components/UserInterface";
 
 function showProject(project) {
     const projectElement = UserInterface.initProject(project.getName());
-    projectElement.addEventListener('click', () => console.log(project.getName()));
+    projectElement.addEventListener('click', showTasks);
 }
 
 function showProjects() {
@@ -16,11 +16,12 @@ function showProjects() {
     }
 }
 
-function showTasks(projectName) {
+function showTasks(event, projectName) {
+    console.log(projectName);
     UserInterface.clearTodoDisplay();
     Memory
         .getTasks(projectName)
-        .forEach(this.initSingleTask.bind(this));
+        .forEach(UserInterface.initSingleTask.bind(UserInterface, projectName));
 }
 
 function submitProject(event) {
@@ -37,6 +38,8 @@ function submitTask(projectName, event) {
     Memory.setTask(projectName, new Task(input.value));
     this.initAllTasks(projectName);
 }
+
+/*=========== EVENT LISTENING ===========*/
 
 window.addEventListener('beforeunload', () => {
     Memory.saveToStorage();

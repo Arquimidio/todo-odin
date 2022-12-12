@@ -31,7 +31,6 @@ export default class Memory {
 
     static setProject(project) {
         if(!this.projectExists(project.getName())) {
-            console.log(project)
             this.getProjects().push(project);
         }
     }
