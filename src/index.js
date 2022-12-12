@@ -3,12 +3,16 @@ import Project from "./components/Project";
 import Memory from "./components/Memory";
 import UserInterface from "./components/UserInterface";
 
+function showProject(project) {
+    const projectElement = UserInterface.initProject(project.getName());
+    projectElement.addEventListener('click', () => console.log(project.getName()));
+}
+
 function showProjects() {
     const projects = Memory.getProjects();
 
     for(const project of projects) {
-        const projectElement = UserInterface.initProject(project.getName());
-        projectElement.addEventListener('click', () => console.log(project.getName()));
+        showProject(project);
     }
 }
 
