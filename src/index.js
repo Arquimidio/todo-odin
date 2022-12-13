@@ -3,9 +3,11 @@ import Project from "./components/Project";
 import Memory from "./components/Memory";
 import UserInterface from "./components/UserInterface";
 
+
 function showProject(project) {
-    const projectElement = UserInterface.initProject(project.getName());
-    projectElement.addEventListener('click', showTasks);
+    const projectName = project.getName();
+    const projectElement = UserInterface.initProject(projectName);
+    projectElement.addEventListener('click', showTasks.bind(null, projectName));
 }
 
 function showProjects() {
@@ -16,19 +18,22 @@ function showProjects() {
     }
 }
 
-function showTasks(event, projectName) {
-    console.log(projectName);
-    UserInterface.clearTodoDisplay();
+function showTasks(projectName) {
+    UserInterface.clearChildren(UserInterface.todoDisplay);
+    UserInterface.setSelectedDisplay(projectName);
     Memory
         .getTasks(projectName)
-        .forEach(UserInterface.initSingleTask.bind(UserInterface, projectName));
+        .forEach(task => UserInterface.initSingleTask.call(UserInterface, task.title));
+    const addTaskForm = UserInterface.initTaskAdder();
+    addTaskForm.addEventListener('submit', submitTask.bind(null, projectName));
 }
 
 function submitProject(event) {
     event.preventDefault();
     const { value: projectName } = UserInterface.newProjectName; 
-    Memory.setProject.call(Memory, new Project(projectName));
-    UserInterface.updateProjects(Memory.getProjects());
+    const newProject = new Project(projectName);
+    Memory.setProject.call(Memory, newProject);
+    showProject(newProject)
     event.target.reset();
 }
 
@@ -36,7 +41,8 @@ function submitTask(projectName, event) {
     event.preventDefault();
     const { target: { firstChild: input } } = event;
     Memory.setTask(projectName, new Task(input.value));
-    this.initAllTasks(projectName);
+    UserInterface.initSingleTask(input.value);
+    event.target.reset();
 }
 
 /*=========== EVENT LISTENING ===========*/

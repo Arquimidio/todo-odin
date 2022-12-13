@@ -16,14 +16,6 @@ export default class UserInterface {
         return item;
     }
 
-    static updateProjects(allProjects) {
-        this.clearChildren(this.projectsDisplay);
-
-        for(const project of allProjects) {
-            this.initProject(project.getName());
-        }
-    }
-
     static setSelectedDisplay(displayName) {
         this.projectTitle.textContent = displayName;
     }
@@ -38,6 +30,7 @@ export default class UserInterface {
         const adderInput = document.createElement('input');
         adderForm.append(adderInput);
         this.taskAdderContainer.append(adderForm);
+
         return adderForm;
     }
 
@@ -48,19 +41,8 @@ export default class UserInterface {
     }
 
     // Creates a single task element in the DOM
-    static initSingleTask(task) {
-        const listItem = this.makeItem(task.title);
+    static initSingleTask(taskTitle) {
+        const listItem = this.makeItem(taskTitle);
         this.todoDisplay.append(listItem);
     }   
-
-    static showProject(project) {
-        this.setSelectedDisplay(project);
-        this.initTaskAdder(project);
-    }
-
-    static clearTodoDisplay() {
-        while(this.todoDisplay.firstChild) {
-            this.todoDisplay.firstChild.remove();
-        }
-    }
 }

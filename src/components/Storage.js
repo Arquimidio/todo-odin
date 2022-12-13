@@ -34,6 +34,7 @@ export default class Storage {
             const { projects } = parsedList;
             parsedList.projects = projects
                 .map(proj => new Project(...Object.values(proj)));
+                
             return parsedList;
         } 
         
