@@ -5,15 +5,35 @@ import Project from "./components/Project";
 import Memory from "./components/Memory";
 import UserInterface from "./components/UserInterface";
 
-
+let selectedProject;
 
 function loadProject(project) {
     const projectName = project.getName();
-    const projectElement = UserInterface.renderProject(projectName);
-    projectElement.addEventListener(
+    const [
+        projectContainer,
+        projectElement, 
+        projectRemover
+    ] = UserInterface.renderProject(projectName);
+
+    projectContainer.addEventListener(
         'click', 
-        showTasks.bind(null, projectName)
+        () => {
+            UserInterface.singleSelection(
+                projectContainer
+            )
+            showTasks.call(null, projectName)
+            selectedProject = project;
+        }
     );
+
+    projectRemover.addEventListener(
+        'click',
+        deleteProject.bind(
+            null, 
+            projectName, 
+            projectContainer
+        )
+    )
 }
 
 function loadProjects() {
@@ -24,10 +44,25 @@ function loadProjects() {
     }
 }
 
+function deleteProject(name, container, event) {
+    event.stopPropagation();
+    Memory.deleteProject(name);
+
+    container.remove();
+
+    if(selectedProject?.getName() === name) {
+        selectedProject = null;
+        UserInterface.clearProjectDisplay();
+    }
+}
+
+
 function showTasks(projectName) {
+    const project = Memory.getProject(projectName);
+    selectedProject = project;
     UserInterface.clearChildren(UserInterface.todoDisplay);
     UserInterface.setSelectedProject(projectName);
-    Memory
+    project
         .getTasks(projectName)
         .forEach(
             task => UserInterface.renderTask.call(
@@ -51,6 +86,7 @@ function submitProject(event) {
         loadProject(newProject)
         UserInterface.newProjectName.blur();
         event.target.reset();
+        showTasks(projectName);
     };
 }
 

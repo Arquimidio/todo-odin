@@ -5,9 +5,14 @@
 }
 
 :root {
+  --black: rgb(62, 62, 62);
   --main-color: rgb(126, 188, 255);
-  --placeholder-color: black;
+  --placeholder-color: var(--black);
+  --remover-color: red;
 
+  --sub-base-x-small: calc(var(--sub-base-m-small) * 0.75);
+  --sub-base-m-small: calc(var(--sub-base-small) * 0.75);
+  --sub-base-small: calc(var(--base) * 0.75);
   --base: 1rem;
   --small: calc(var(--base) * 1.25);
   --small-medium: calc(var(--small) * 1.25);
@@ -21,6 +26,11 @@ body {
   grid-template-rows: repeat(2, 1fr);
   min-height: 100vh;
   font-family: sans-serif;
+  color: var(--black);
+}
+
+form {
+  display: flex;
 }
 
 ul {
@@ -30,6 +40,7 @@ ul {
 input {
   background-color: transparent;
   border: none;
+  max-width: 150px;
 }
 
 input:focus {
@@ -43,6 +54,11 @@ input::placeholder {
 .adder::before {
   content: '+';
   color: var(--placeholder-color);
+  margin-right: var(--sub-base-x-small);
+}
+
+.logo {
+  font-size: var(--medium);
 }
 
 .projects-container,
@@ -53,8 +69,12 @@ input::placeholder {
 .projects-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--small);
   background-color: var(--main-color);
+}
+
+.project.select {
+  background-color: red;
 }
 
 .projects {
@@ -63,6 +83,50 @@ input::placeholder {
   gap: var(--small)
 }
 
+.project-name {
+  font-size: var(--small-medium);
+  font-weight: bolder;
+}
+
+.project-name:empty {
+  height: 100%;
+  background-image: url('../empty.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.project-todos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sub-base-small);
+}
+
+.project-todos:empty {
+  display: none;
+}
+
 .project {
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-remover {
+  font-size: var(--small);
+}
+
+.project-remover:hover {
+  color: var(--remover-color);
+}
+
+.todo-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small);
+}
+
+.task {
+  padding: var(--base);
+  border-left: 5px solid var(--main-color);
 }

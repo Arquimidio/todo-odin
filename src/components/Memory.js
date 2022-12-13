@@ -15,6 +15,18 @@ export default class Memory {
         return this.list.projects;
     }
 
+    static setProjects(projects) {
+        this.getList().projects = projects;
+    }
+
+    static getProject(projectName) {
+        return this.findProject(projectName);
+    }
+
+    static setProject(project) {
+        this.getProjects().push(project);
+    }
+
     static findProject(projectName) {
         return this.list.projects.find(project => {
             return project.name === projectName
@@ -25,12 +37,16 @@ export default class Memory {
         return !!this.findProject(projectName);
     }
 
-    static getProject(projectName) {
-        return this.findProject(projectName);
-    }
+    static deleteProject(projectName) {
+        const projects = this.getProjects();
+        const projIndex = projects
+            .findIndex(project => project.getName() === projectName)
 
-    static setProject(project) {
-        this.getProjects().push(project);
+        const left = projects.slice(0, projIndex);
+        const right = projects.slice(projIndex + 1);
+        const newList = [...left, ...right];
+        this.setProjects(newList);
+        console.log(this.list);
     }
 
     static getTasks(projectName) {

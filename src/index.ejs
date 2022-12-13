@@ -8,14 +8,20 @@
 </head>
 <body>
     <nav class="projects-container">
+       <h1 class="logo">Taskee</h1>
        <ul id="projects" class="projects"></ul>
        <form id="projects-adder" class="adder">
-        <input id="projects-new-name" type="text" placeholder="Add Project">
+        <input 
+            id="projects-new-name" 
+            type="text" 
+            placeholder="Add Project"
+            minlength="3"
+        >
        </form>
     </nav>
-    <main class="todo-container">
-        <div id="project-name"></div>
-        <ul id="project-todos"></ul>
+    <main id="todo-container" class="todo-container">
+        <div id="project-name" class="project-name"></div>
+        <ul id="project-todos" class="project-todos"></ul>
         <div id="task-adder-container"></div>
     </main>
 </body>
