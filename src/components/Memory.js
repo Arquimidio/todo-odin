@@ -30,9 +30,7 @@ export default class Memory {
     }
 
     static setProject(project) {
-        if(!this.projectExists(project.getName())) {
-            this.getProjects().push(project);
-        }
+        this.getProjects().push(project);
     }
 
     static getTasks(projectName) {

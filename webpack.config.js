@@ -25,7 +25,7 @@ module.exports = {
         })
     ],
 
-    modules: {
+    module: {
         rules: [
             {
                 test: /\.css$/i,

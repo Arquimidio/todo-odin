@@ -16,7 +16,7 @@ export default class UserInterface {
         return item;
     }
 
-    static setSelectedDisplay(displayName) {
+    static setSelectedProject(displayName) {
         this.projectTitle.textContent = displayName;
     }
 
@@ -24,25 +24,34 @@ export default class UserInterface {
         this.taskAdderContainer.firstChild?.remove();
     }
 
-    static initTaskAdder() {
+    static renderTaskAdder() {
         this.removeTaskAdder();
         const adderForm = document.createElement('form');
         const adderInput = document.createElement('input');
+        adderInput.setAttribute('placeholder', 'Add task')
+        adderForm.classList.add('adder');
         adderForm.append(adderInput);
         this.taskAdderContainer.append(adderForm);
 
         return adderForm;
     }
 
-    static initProject(projectName) {
-        const listItem = this.makeItem(projectName);
-        this.projectsDisplay.append(listItem);
+    static render(text, parent, classes=[]) {
+        const listItem = this.makeItem(text);
+        listItem.classList.add(...classes);
+        parent.append(listItem);
         return listItem;
     }
 
-    // Creates a single task element in the DOM
-    static initSingleTask(taskTitle) {
-        const listItem = this.makeItem(taskTitle);
-        this.todoDisplay.append(listItem);
-    }   
+    static renderProject(text) {
+        return this.render(
+            text, 
+            this.projectsDisplay, 
+            ['project']
+        );
+    }
+
+    static renderTask(text) {
+        return this.render(text, this.todoDisplay);
+    }
 }
