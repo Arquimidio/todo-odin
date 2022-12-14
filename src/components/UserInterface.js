@@ -55,6 +55,7 @@ export default class UserInterface {
         const projectRemover = document.createElement('span');
 
         projectContainer.classList.add('project');
+        projectName.classList.add('project-title');
         projectRemover.classList.add('project-remover');
 
         projectName.textContent = text;
@@ -83,7 +84,9 @@ export default class UserInterface {
     }
 
     static singleSelection(element) {
-        this.unselect(element.classList[0] + '.select');
+        const classes = [...element.classList];
+
+        this.unselect(`.${classes[0]}` + '.select');
         this.select(element);
     }
 }

@@ -7,6 +7,7 @@
 :root {
   --black: rgb(62, 62, 62);
   --main-color: rgb(126, 188, 255);
+  --light-blue: rgb(206, 230, 255);
   --placeholder-color: var(--black);
   --remover-color: red;
 
@@ -73,8 +74,13 @@ input::placeholder {
   background-color: var(--main-color);
 }
 
-.project.select {
-  background-color: red;
+.project-title {
+  padding: 0.5rem;
+  border-radius: var(--small);
+}
+
+.project.select .project-title {
+  background-color: var(--light-blue);
 }
 
 .projects {
