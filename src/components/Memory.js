@@ -46,7 +46,13 @@ export default class Memory {
         const right = projects.slice(projIndex + 1);
         const newList = [...left, ...right];
         this.setProjects(newList);
-        console.log(this.list);
+    }
+
+    static getAllTasks() {
+        return this
+            .getProjects()
+            .map(project => project.getTasks())
+            .reduce((acc, cur) => [...acc, ...cur], []);
     }
 
     static getTasks(projectName) {

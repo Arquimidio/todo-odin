@@ -1,9 +1,10 @@
 export default class UserInterface {
-    static newProjectName = document.getElementById('projects-new-name')
+    static filtersDisplay = document.getElementById('filters');
+    static newProjectName = document.getElementById('projects-new-name');
     static projectsAdder = document.getElementById('projects-adder');
     static projectsDisplay = document.getElementById('projects');
     static projectTitle = document.getElementById('project-name');
-    static taskAdderContainer = document.getElementById('task-adder-container')
+    static taskAdderContainer = document.getElementById('task-adder-container');
     static todoDisplay = document.getElementById('project-todos');
     static todoContainer = document.getElementById('todo-container');
 
@@ -49,6 +50,14 @@ export default class UserInterface {
         return listItem;
     }
 
+    static renderFilter(text) {
+        const filter = document.createElement('li');
+        filter.textContent = text;
+        this.filtersDisplay.append(filter);
+
+        return filter
+    }
+
     static renderProject(text) {
         const projectContainer = document.createElement('li');
         const projectName = document.createElement('span');
@@ -66,7 +75,6 @@ export default class UserInterface {
         )
 
         this.projectsDisplay.append(projectContainer)
-
         return [projectContainer, projectName, projectRemover];
     }
 
