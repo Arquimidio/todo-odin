@@ -4,6 +4,10 @@ export default class Project {
         this.todo = todo;
     }
 
+    setTodo(array) {
+        this.todo = array;
+    }
+
     getTasks() {
         return this.todo;
     }

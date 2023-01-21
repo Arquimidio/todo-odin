@@ -135,4 +135,8 @@ input::placeholder {
 .task {
   padding: var(--base);
   border-left: 5px solid var(--main-color);
+  background-color: var(--light-blue);
+  border-radius: var(--sub-base-x-small);
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,4 +1,5 @@
 import Project from "./Project";
+import Task from "./Task";
 
 const LIST_NAME = 'todoList';
 
@@ -9,10 +10,6 @@ class ProjectList {
 }
 
 export default class Storage {
-
-    static findByProp(array, prop, propVal) {
-        return array.find(item => item[prop] === propVal);
-    }
 
     static initialize() {
         const list = this.getList();
@@ -33,7 +30,13 @@ export default class Storage {
         if(parsedList) {
             const { projects } = parsedList;
             parsedList.projects = projects
-                .map(proj => new Project(...Object.values(proj)));
+                .map(proj => {
+                    const ProjectInstance = new Project(...Object.values(proj));
+                    const projectTasks = ProjectInstance.getTasks();
+                    const initializedTasks = projectTasks.map(task => new Task(...Object.values(task)))
+                    ProjectInstance.setTodo(initializedTasks);
+                    return ProjectInstance;
+                });
                 
             return parsedList;
         } 

@@ -21,7 +21,7 @@ export default class TodoList {
         // Loads user projects from localStorage
         document.addEventListener(
             'DOMContentLoaded',
-            this.loadProjects.bind(this)
+            this.loadProjects.bind(this, Memory.getProjects())
          )
     }
 
@@ -29,7 +29,7 @@ export default class TodoList {
         const projectName = project.getName();
         const [
             projectContainer,
-            projectElement, 
+            _, 
             projectRemover
         ] = UserInterface.renderProject(projectName);
     
@@ -58,10 +58,8 @@ export default class TodoList {
         }
     }
 
-    static loadProjects() {
-        const projects = Memory.getProjects();
-    
-        for(const project of projects) {
+    static loadProjects(projArray) {
+        for(const project of projArray) {
             this.loadProject(project);
         }
     }
@@ -104,12 +102,12 @@ export default class TodoList {
         event.preventDefault();
         const { value: projectName } = UserInterface.newProjectName; 
         if(!Memory.projectExists(projectName) && projectName.length >= 3) {
-            const newProject = new Project(projectName);
-            Memory.setProject.call(Memory, newProject);
-            this.loadProject(newProject, true);
-            UserInterface.newProjectName.blur();
             event.target.reset();
+            const newProject = new Project(projectName);
+            this.loadProject(newProject, true);
+            Memory.setProject.call(Memory, newProject);
             this.showTasks(projectName);
+            UserInterface.newProjectName.blur();
         };
     }
 

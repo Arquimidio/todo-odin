@@ -43,13 +43,6 @@ export default class UserInterface {
         return adderForm;
     }
 
-    static render(text, parent, classes=[]) {
-        const listItem = this.makeItem(text);
-        listItem.classList.add(...classes);
-        parent.append(listItem);
-        return listItem;
-    }
-
     static renderFilter(text) {
         const filter = document.createElement('li');
         filter.textContent = text;
@@ -78,8 +71,17 @@ export default class UserInterface {
         return [projectContainer, projectName, projectRemover];
     }
 
-    static renderTask(text) {
-        return this.render(text, this.todoDisplay, ['task']);
+    static renderTask(text, date='') {
+        const listItem = this.makeItem();
+        const dateSelector = document.createElement('input');
+        const taskText = document.createElement('span');
+        taskText.textContent = text;
+        dateSelector.setAttribute('type', 'date');
+        dateSelector.setAttribute('value', date);
+        listItem.append(taskText, dateSelector);
+        listItem.classList.add('task');
+        this.todoDisplay.append(listItem);
+        return listItem;
     }
 
     static select(element) {
