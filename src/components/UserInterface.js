@@ -71,15 +71,20 @@ export default class UserInterface {
         return [projectContainer, projectName, projectRemover];
     }
 
-    static renderTask(text, date='') {
+    static renderTask(text, id, date='') {
         const listItem = this.makeItem();
         const dateSelector = document.createElement('input');
         const taskText = document.createElement('span');
+
         taskText.textContent = text;
+
         dateSelector.setAttribute('type', 'date');
         dateSelector.setAttribute('value', date);
+
         listItem.append(taskText, dateSelector);
         listItem.classList.add('task');
+        listItem.dataset.id = id || '';
+
         this.todoDisplay.append(listItem);
         return listItem;
     }

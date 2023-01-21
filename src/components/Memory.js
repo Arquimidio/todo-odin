@@ -59,10 +59,23 @@ export default class Memory {
         return this.getProject(projectName)?.getTasks();
     }
 
+    static getTaskIndex(projectName, taskId) {
+        return this.getProject(projectName)?.getTasks()
+            .findIndex(task => task.id === taskId)
+    }
+
     static setTask(projectName, task) {
         const targetProject = this.findProject(projectName);
         if(targetProject) {
             targetProject.setTask(task);
+            console.log(this.list);
+        }
+    }
+
+    static editTask(projectName, taskId, newTask) {
+        const targetProject = this.findProject(projectName);
+        if(targetProject) {
+            targetProject.editTask(taskId, newTask);
         }
     }
 

@@ -26,6 +26,7 @@ export default class Storage {
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
         const parsedList = JSON.parse(list);
+        console.log(parsedList)
 
         if(parsedList) {
             const { projects } = parsedList;
@@ -33,7 +34,7 @@ export default class Storage {
                 .map(proj => {
                     const ProjectInstance = new Project(...Object.values(proj));
                     const projectTasks = ProjectInstance.getTasks();
-                    const initializedTasks = projectTasks.map(task => new Task(...Object.values(task)))
+                    const initializedTasks = projectTasks.map(task => new Task(task))
                     ProjectInstance.setTodo(initializedTasks);
                     return ProjectInstance;
                 });

@@ -2,6 +2,7 @@ import Task from "./Task";
 import Project from "./Project";
 import Memory from "./Memory";
 import UserInterface from "./UserInterface";
+import { v4 as uuidv4 } from 'uuid';
 
 export default class TodoList {
     static selectedProject;
@@ -87,7 +88,9 @@ export default class TodoList {
             .forEach(
                 task => UserInterface.renderTask.call(
                     UserInterface, 
-                    task.title
+                    task.title,
+                    task.id,
+                    task.date
                 )
             );
     
@@ -114,8 +117,9 @@ export default class TodoList {
     static submitTask(targetProjectName, event) {
         event.preventDefault();
         const { target: { firstChild: input } } = event;
-        UserInterface.renderTask(input.value);
-        Memory.setTask(targetProjectName, new Task(input.value));
+        const newTaskId = uuidv4();
+        UserInterface.renderTask(input.value, newTaskId);
+        Memory.setTask(targetProjectName, new Task({ title: input.value, id: newTaskId }));
         event.target.reset();
         input.blur();
     }
