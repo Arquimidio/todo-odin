@@ -85,14 +85,21 @@ export default class TodoList {
     
         project
             .getTasks(projectName)
-            .forEach(
-                task => UserInterface.renderTask.call(
+            .forEach( task => {
+                const listItem = UserInterface.renderTask.call(
                     UserInterface, 
                     task.title,
                     task.id,
-                    task.date
+                    task.dueDate
                 )
-            );
+
+                const dateSelector = listItem.querySelector('.date-selector');
+                dateSelector.addEventListener('input', event => {
+                    const newTask = new Task(task);
+                    newTask.dueDate = event.target.value;
+                    project.editTask(task.id, newTask);
+                })
+            });
     
         const addTaskForm = UserInterface.renderTaskAdder();
         addTaskForm.addEventListener(

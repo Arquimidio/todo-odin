@@ -68,7 +68,6 @@ export default class Memory {
         const targetProject = this.findProject(projectName);
         if(targetProject) {
             targetProject.setTask(task);
-            console.log(this.list);
         }
     }
 

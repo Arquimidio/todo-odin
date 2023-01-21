@@ -80,6 +80,7 @@ export default class UserInterface {
 
         dateSelector.setAttribute('type', 'date');
         dateSelector.setAttribute('value', date);
+        dateSelector.classList.add('date-selector');
 
         listItem.append(taskText, dateSelector);
         listItem.classList.add('task');
