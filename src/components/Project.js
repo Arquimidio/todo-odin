@@ -19,8 +19,11 @@ export default class Project {
     editTask(taskId, newData) {
         const taskIndex = this.todo.findIndex(task => task.id === taskId);
         if(taskIndex !== -1) {
-            this.setTodo([...this.todo.slice(0, taskIndex), newData, ...this.todo.slice(taskIndex + 1)]);
-            console.log(this.todo);
+            this.setTodo([
+                ...this.todo.slice(0, taskIndex), 
+                newData, 
+                ...this.todo.slice(taskIndex + 1)
+            ]);
         }
     }
 

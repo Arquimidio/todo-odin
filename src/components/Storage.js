@@ -26,7 +26,6 @@ export default class Storage {
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
         const parsedList = JSON.parse(list);
-        console.log(parsedList)
 
         if(parsedList) {
             const { projects } = parsedList;

@@ -85,27 +85,29 @@ export default class TodoList {
     
         project
             .getTasks(projectName)
-            .forEach( task => {
-                const listItem = UserInterface.renderTask.call(
-                    UserInterface, 
-                    task.title,
-                    task.id,
-                    task.dueDate
-                )
-
-                const dateSelector = listItem.querySelector('.date-selector');
-                dateSelector.addEventListener('input', event => {
-                    const newTask = new Task(task);
-                    newTask.dueDate = event.target.value;
-                    project.editTask(task.id, newTask);
-                })
-            });
+            .forEach(task => this.showTask(project, task));
     
         const addTaskForm = UserInterface.renderTaskAdder();
         addTaskForm.addEventListener(
             'submit', 
             this.submitTask.bind(this, projectName)
         );
+    }
+
+    static showTask(project, task) {
+        const listItem = UserInterface.renderTask.call(
+            UserInterface, 
+            task.title,
+            task.id,
+            task.dueDate
+        )
+
+        const dateSelector = listItem.querySelector('.date-selector');
+        dateSelector.addEventListener('input', event => {
+            const newTask = new Task(task);
+            newTask.dueDate = event.target.value;
+            project.editTask(task.id, newTask);
+        })
     }
 
     static submitProject(event) {
@@ -124,9 +126,11 @@ export default class TodoList {
     static submitTask(targetProjectName, event) {
         event.preventDefault();
         const { target: { firstChild: input } } = event;
+        const project = Memory.getProject(targetProjectName);
         const newTaskId = uuidv4();
-        UserInterface.renderTask(input.value, newTaskId);
-        Memory.setTask(targetProjectName, new Task({ title: input.value, id: newTaskId }));
+        const newTask = new Task({ title: input.value, id: newTaskId });
+        this.showTask(project, newTask);
+        project.setTask(newTask);
         event.target.reset();
         input.blur();
     }
