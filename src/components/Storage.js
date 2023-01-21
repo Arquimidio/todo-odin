@@ -30,7 +30,6 @@ export default class Storage {
         return ProjectInstance;
     }
 
-
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
         const parsedList = JSON.parse(list);
