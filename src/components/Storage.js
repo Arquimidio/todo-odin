@@ -15,7 +15,7 @@ export default class Storage {
         const list = this.getList();
 
         if(!list) {
-            this.setList(new ProjectList([new Project('default')]));
+            this.setList(new ProjectList([new Project('Default')]));
             return this.getList()
         }
 
