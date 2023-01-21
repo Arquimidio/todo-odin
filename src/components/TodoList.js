@@ -34,17 +34,15 @@ export default class TodoList {
             projectRemover
         ] = UserInterface.renderProject(projectName);
     
-        projectContainer.addEventListener(
-            'click', 
-            () => {
-                UserInterface.singleSelection(
-                    projectContainer
-                )
-                this.showTasks.call(this, projectName)
-                this.selectedProject = project;
-            }
-        );
-    
+        const showProject = () => {
+            UserInterface.singleSelection(
+                projectContainer
+            )
+            this.showTasks.call(this, projectName)
+            this.selectedProject = project;
+        }
+        
+        projectContainer.addEventListener('click', showProject);
         projectRemover.addEventListener(
             'click',
             this.deleteProject.bind(
@@ -68,12 +66,15 @@ export default class TodoList {
     static deleteProject(name, container, event) {
         event.stopPropagation();
         Memory.deleteProject(name);
-    
         container.remove();
-    
-        if(this.selectedProject?.getName() === name) {
+
+        const unselectProject = () => {
             this.selectedProject = null;
             UserInterface.clearProjectDisplay();
+        }
+    
+        if(this.selectedProject?.getName() === name) {
+           unselectProject();
         }
     }
 
@@ -103,11 +104,14 @@ export default class TodoList {
         )
 
         const dateSelector = listItem.querySelector('.date-selector');
-        dateSelector.addEventListener('input', event => {
+
+        const updateDueDate = (event) => {
             const newTask = new Task(task);
             newTask.dueDate = event.target.value;
             project.editTask(task.id, newTask);
-        })
+        }
+
+        dateSelector.addEventListener('input', updateDueDate);
     }
 
     static submitProject(event) {
