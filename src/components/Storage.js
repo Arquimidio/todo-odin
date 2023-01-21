@@ -22,6 +22,14 @@ export default class Storage {
         return list;
     }
 
+    static initializeProject(proj) {
+        const ProjectInstance = new Project(...Object.values(proj));
+        const projectTasks = ProjectInstance.getTasks();
+        const initializedTasks = projectTasks.map(task => new Task(task))
+        ProjectInstance.setTodo(initializedTasks);
+        return ProjectInstance;
+    }
+
 
     static getList() {
         const list = localStorage.getItem(LIST_NAME);
@@ -29,15 +37,7 @@ export default class Storage {
 
         if(parsedList) {
             const { projects } = parsedList;
-            parsedList.projects = projects
-                .map(proj => {
-                    const ProjectInstance = new Project(...Object.values(proj));
-                    const projectTasks = ProjectInstance.getTasks();
-                    const initializedTasks = projectTasks.map(task => new Task(task))
-                    ProjectInstance.setTodo(initializedTasks);
-                    return ProjectInstance;
-                });
-                
+            parsedList.projects = projects.map(this.initializeProject);
             return parsedList;
         } 
         
