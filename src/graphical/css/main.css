@@ -33,6 +33,8 @@ body {
 
 nav {
   user-select: none;
+  overflow-y: scroll;
+  max-height: 100vh;
 }
 
 form {
