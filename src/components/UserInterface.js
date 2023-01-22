@@ -51,24 +51,36 @@ export default class UserInterface {
         return filter
     }
 
-    static renderProject(text) {
+    static makeRemover() {
+        const projectRemover = document.createElement('span');
+        projectRemover.classList.add('project-remover');
+        projectRemover.textContent = 'x';
+        return projectRemover;
+    }
+
+    static renderProject(text, isRemovable = true) {
         const projectContainer = document.createElement('li');
         const projectName = document.createElement('span');
-        const projectRemover = document.createElement('span');
+        const projectIcon = document.createElement('i');
+        const projectLeft = document.createElement('div');
 
         projectContainer.classList.add('project');
         projectName.classList.add('project-title');
-        projectRemover.classList.add('project-remover');
+        projectIcon.classList.add('fa-solid', 'fa-folder');
 
         projectName.textContent = text;
-        projectRemover.textContent = 'x'
-        projectContainer.append(
-            projectName,
-            projectRemover
-        )
-
+        
+        projectLeft.append(projectIcon, projectName);
+        projectContainer.append(projectLeft);
         this.projectsDisplay.append(projectContainer)
-        return [projectContainer, projectName, projectRemover];
+
+        if(isRemovable) {
+            const remover = this.makeRemover();
+            projectContainer.append(remover);
+            return [projectContainer, projectName, remover]
+        } else {
+            return [projectContainer, projectName];
+        }
     }
 
     static renderTask(text, id, date='') {

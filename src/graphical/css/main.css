@@ -79,7 +79,12 @@ input::placeholder {
   border-radius: var(--small);
 }
 
-.project.select .project-title {
+.project {
+  padding: var(--sub-base-x-small);
+  border-radius: var(--sub-base-x-small);
+}
+
+.project.select {
   background-color: var(--light-blue);
 }
 

@@ -64,20 +64,6 @@ export default class Memory {
             .findIndex(task => task.id === taskId)
     }
 
-    static setTask(projectName, task) {
-        const targetProject = this.findProject(projectName);
-        if(targetProject) {
-            targetProject.setTask(task);
-        }
-    }
-
-    static editTask(projectName, taskId, newTask) {
-        const targetProject = this.findProject(projectName);
-        if(targetProject) {
-            targetProject.editTask(taskId, newTask);
-        }
-    }
-
     static saveToStorage() {
         Storage.setList(this.list);
     }
