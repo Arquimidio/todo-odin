@@ -1,5 +1,6 @@
 import Task from "./Task";
 import Project from "./Project";
+import DinamicProject from "./DinamicProject";
 import Memory from "./Memory";
 import UserInterface from "./UserInterface";
 import { v4 as uuidv4 } from 'uuid';
@@ -8,19 +9,10 @@ import { isToday, isThisWeek, parseISO } from "date-fns";
 export default class TodoList {
     static selectedProject;
 
-    static loader(name, filterCb) {
-        return () => {
-            const tasks = Memory
-                .getAllTasks()
-                .filter(filterCb)
-            return new Project(name, tasks);
-        } 
-    }
-
     static loadDefaultProjects() {
-        this.loadProject({ removable: false, loader: this.loader('Inbox', () => true) });
-        this.loadProject({ removable: false, loader: this.loader('Day', (task) => isToday(parseISO(task.dueDate))) });
-        this.loadProject({ removable: false, loader: this.loader('Week', (task) => isThisWeek(parseISO(task.dueDate)))});
+        this.loadProject({ project: new DinamicProject('Inbox', () => true), removable: false });
+        this.loadProject({ project: new DinamicProject('Day', (task) => isToday(parseISO(task.dueDate))), removable: false });
+        this.loadProject({ project: new DinamicProject('Week', (task) => isThisWeek(parseISO(task.dueDate))), removable: false });
     }
 
     static init() {
@@ -44,7 +36,7 @@ export default class TodoList {
          )
     }
 
-    static loadProject({ isNew = false, removable = true, loader = false, project = loader() }) {
+    static loadProject({ project, isNew = false, removable = true }) {
         const projectName = project.getName();
         const [
             projectContainer,
@@ -56,7 +48,7 @@ export default class TodoList {
             UserInterface.singleSelection(
                 projectContainer
             )
-            this.showTasks.call(this, loader? loader() : project, removable);
+            this.showTasks.call(this, project, removable);
             this.selectedProject = project;
         }
         
@@ -94,9 +86,8 @@ export default class TodoList {
             UserInterface.clearProjectDisplay();
         }
     
-        if(this.selectedProject?.getName() === name) {
-           unselectProject();
-        }
+        unselectProject();
+        UserInterface.unselect('.project');
     }
 
     static showTasks(project, isAdder = true) {

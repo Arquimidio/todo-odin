@@ -8,7 +8,8 @@
     visibility: hidden;
   }
   
-  .project:hover .project-remover {
+  .project:hover .project-remover,
+  .project.select .project-remover {
     visibility: visible;
   }
 }
