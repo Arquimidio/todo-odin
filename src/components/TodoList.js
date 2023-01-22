@@ -106,7 +106,7 @@ export default class TodoList {
     
         project
             .getTasks()
-            .forEach(task => this.showTask(project, task));
+            .forEach(task => this.showTask(task));
     
         if(isAdder) {
             const addTaskForm = UserInterface.renderTaskAdder();
@@ -119,7 +119,7 @@ export default class TodoList {
         }
     }
 
-    static showTask(project, task, disabled) {
+    static showTask(task) {
         const listItem = UserInterface.renderTask.call(
             UserInterface, 
             task.title,
@@ -132,7 +132,7 @@ export default class TodoList {
         const updateDueDate = (event) => {
             const newTask = new Task(task);
             newTask.dueDate = event.target.value;
-            project.editTask(task.id, newTask);
+            task.updateTask(newTask);
         }
 
         dateSelector.addEventListener('input', updateDueDate);
@@ -157,7 +157,7 @@ export default class TodoList {
         const project = Memory.getProject(targetProjectName);
         const newTaskId = uuidv4();
         const newTask = new Task({ title: input.value, id: newTaskId });
-        this.showTask(project, newTask);
+        this.showTask(newTask);
         project.setTask(newTask);
         event.target.reset();
         input.blur();

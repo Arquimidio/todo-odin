@@ -5,4 +5,10 @@ export default class Task {
         this.dueDate = dueDate;
         this.id = id;
     }
+
+    updateTask(editedTask) {
+        for(const prop in editedTask) {
+            this[prop] = editedTask[prop];
+        }
+    }
 }
