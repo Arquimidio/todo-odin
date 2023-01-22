@@ -1,5 +1,4 @@
 export default class UserInterface {
-    static filtersDisplay = document.getElementById('filters');
     static newProjectName = document.getElementById('projects-new-name');
     static projectsAdder = document.getElementById('projects-adder');
     static projectsDisplay = document.getElementById('projects');
@@ -43,18 +42,9 @@ export default class UserInterface {
         return adderForm;
     }
 
-    static renderFilter(text) {
-        const filter = document.createElement('li');
-        filter.textContent = text;
-        this.filtersDisplay.append(filter);
-
-        return filter
-    }
-
     static makeRemover() {
         const projectRemover = document.createElement('span');
-        projectRemover.classList.add('project-remover');
-        projectRemover.textContent = 'x';
+        projectRemover.classList.add('project-remover', 'fa-solid', 'fa-delete-left');
         return projectRemover;
     }
 

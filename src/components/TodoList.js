@@ -3,14 +3,24 @@ import Project from "./Project";
 import Memory from "./Memory";
 import UserInterface from "./UserInterface";
 import { v4 as uuidv4 } from 'uuid';
+import { isToday, isThisWeek, parseISO, parse} from "date-fns";
 
 export default class TodoList {
     static selectedProject;
 
+    static loader(name, filterCb) {
+        return () => {
+            const tasks = Memory
+                .getAllTasks()
+                .filter(filterCb)
+            return new Project(name, tasks);
+        } 
+    }
+
     static loadDefaultProjects() {
-        this.loadProject(new Project('Inbox', Memory.getAllTasks()), false, false);
-        this.loadProject(new Project('Day'), false, false);
-        this.loadProject(new Project('Week'), false, false);
+        this.loadProject({ removable: false, loader: this.loader('Inbox', () => true) });
+        this.loadProject({ removable: false, loader: this.loader('Day', (task) => isToday(parseISO(task.dueDate))) });
+        this.loadProject({ removable: false, loader: this.loader('Week', (task) => isThisWeek(parseISO(task.dueDate)))});
     }
 
     static init() {
@@ -34,7 +44,7 @@ export default class TodoList {
          )
     }
 
-    static loadProject(project, isNew = false, removable = true) {
+    static loadProject({ isNew = false, removable = true, loader = false, project = loader() }) {
         const projectName = project.getName();
         const [
             projectContainer,
@@ -46,7 +56,7 @@ export default class TodoList {
             UserInterface.singleSelection(
                 projectContainer
             )
-            this.showTasks.call(this, project);
+            this.showTasks.call(this, loader? loader() : project, removable);
             this.selectedProject = project;
         }
         
@@ -70,7 +80,7 @@ export default class TodoList {
 
     static loadProjects(projArray) {
         for(const project of projArray) {
-            this.loadProject(project);
+            this.loadProject({ project });
         }
     }
     
@@ -89,7 +99,7 @@ export default class TodoList {
         }
     }
 
-    static showTasks(project) {
+    static showTasks(project, isAdder = true) {
         this.selectedProject = project;
         UserInterface.clearChildren(UserInterface.todoDisplay);
         UserInterface.setSelectedProject(project.getName());
@@ -98,11 +108,15 @@ export default class TodoList {
             .getTasks()
             .forEach(task => this.showTask(project, task));
     
-        const addTaskForm = UserInterface.renderTaskAdder();
-        addTaskForm.addEventListener(
-            'submit', 
-            this.submitTask.bind(this, project.getName())
-        );
+        if(isAdder) {
+            const addTaskForm = UserInterface.renderTaskAdder();
+            addTaskForm.addEventListener(
+                'submit', 
+                this.submitTask.bind(this, project.getName())
+            );
+        }  else {
+            UserInterface.removeTaskAdder();
+        }
     }
 
     static showTask(project, task, disabled) {
@@ -130,7 +144,7 @@ export default class TodoList {
         if(!Memory.projectExists(projectName) && projectName.length >= 3) {
             event.target.reset();
             const newProject = new Project(projectName);
-            this.loadProject(newProject, true);
+            this.loadProject({ project: newProject, isNew: true });
             Memory.setProject.call(Memory, newProject);
             this.showTasks(newProject);
             UserInterface.newProjectName.blur();
