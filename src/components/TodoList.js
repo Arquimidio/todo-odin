@@ -134,6 +134,7 @@ export default class TodoList {
     static submitProject(event) {
         event.preventDefault();
         const { value: projectName } = UserInterface.newProjectName; 
+
         if(!Memory.projectExists(projectName) && projectName.length >= 3) {
             event.target.reset();
             const newProject = new Project(projectName);
@@ -146,10 +147,12 @@ export default class TodoList {
 
     static submitTask(targetProjectName, event) {
         event.preventDefault();
+
         const { target: { firstChild: input } } = event;
         const project = Memory.getProject(targetProjectName);
         const newTaskId = uuidv4();
         const newTask = new Task({ title: input.value, id: newTaskId, parentProject: project.getName()});
+        
         this.showTask(newTask);
         project.setTask(newTask);
         event.target.reset();

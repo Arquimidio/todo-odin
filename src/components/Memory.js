@@ -55,15 +55,6 @@ export default class Memory {
             .reduce((acc, cur) => [...acc, ...cur], []);
     }
 
-    static getTasks(projectName) {
-        return this.getProject(projectName)?.getTasks();
-    }
-
-    static getTaskIndex(projectName, taskId) {
-        return this.getProject(projectName)?.getTasks()
-            .findIndex(task => task.id === taskId)
-    }
-
     static saveToStorage() {
         Storage.setList(this.list);
     }
