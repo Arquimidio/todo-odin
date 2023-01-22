@@ -4,12 +4,8 @@
     grid-template-rows: 1fr;
   }
 
-  .project-remover {
-    visibility: hidden;
+  .project-remover:hover {
+    color: var(--remover-color);
   }
-  
-  .project:hover .project-remover,
-  .project.select .project-remover {
-    visibility: visible;
-  }
+
 }

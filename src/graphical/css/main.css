@@ -132,11 +132,12 @@ input::placeholder {
 }
 
 .project-remover {
+  visibility: hidden;
   font-size: var(--small);
 }
 
-.project-remover:hover {
-  color: var(--remover-color);
+.project.select .project-remover {
+  visibility: visible;
 }
 
 .todo-container {
