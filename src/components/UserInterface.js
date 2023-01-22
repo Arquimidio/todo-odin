@@ -73,12 +73,12 @@ export default class UserInterface {
         }
     }
 
-    static renderTask(text, id, date='') {
+    static renderTask(text, id, date='', parentProject, outProject) {
         const listItem = this.makeItem();
         const dateSelector = document.createElement('input');
         const taskText = document.createElement('span');
-
-        taskText.textContent = text;
+        
+        taskText.textContent = outProject? `${text} (${parentProject})` : text;
 
         dateSelector.setAttribute('type', 'date');
         dateSelector.setAttribute('value', date);

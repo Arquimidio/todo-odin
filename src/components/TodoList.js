@@ -97,7 +97,7 @@ export default class TodoList {
     
         project
             .getTasks()
-            .forEach(task => this.showTask(task));
+            .forEach(task => this.showTask(task, !isAdder));
     
         if(isAdder) {
             const addTaskForm = UserInterface.renderTaskAdder();
@@ -110,12 +110,14 @@ export default class TodoList {
         }
     }
 
-    static showTask(task) {
+    static showTask(task, outProject = false) {
         const listItem = UserInterface.renderTask.call(
             UserInterface, 
             task.title,
             task.id,
-            task.dueDate
+            task.dueDate,
+            task.parentProject,
+            outProject
         )
 
         const dateSelector = listItem.querySelector('.date-selector');
@@ -147,7 +149,7 @@ export default class TodoList {
         const { target: { firstChild: input } } = event;
         const project = Memory.getProject(targetProjectName);
         const newTaskId = uuidv4();
-        const newTask = new Task({ title: input.value, id: newTaskId });
+        const newTask = new Task({ title: input.value, id: newTaskId, parentProject: project.getName()});
         this.showTask(newTask);
         project.setTask(newTask);
         event.target.reset();

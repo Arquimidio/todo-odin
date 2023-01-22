@@ -11,4 +11,12 @@ export default class DinamicProject {
             .getAllTasks()
             .filter(this.updaterFn.bind(this))
     }
+
+    getName() {
+        return this.name;
+    }
+
+    getTasks() {
+        return this.todo;
+    }
 }

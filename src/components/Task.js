@@ -1,9 +1,10 @@
 export default class Task {
-    constructor({ title, id = '', description = '', dueDate='' }) {
+    constructor({ title, id = '', description = '', dueDate='', parentProject }) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.id = id;
+        this.parentProject = parentProject;
     }
 
     updateTask(editedTask) {
