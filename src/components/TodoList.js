@@ -3,7 +3,7 @@ import Project from "./Project";
 import Memory from "./Memory";
 import UserInterface from "./UserInterface";
 import { v4 as uuidv4 } from 'uuid';
-import { isToday, isThisWeek, parseISO, parse} from "date-fns";
+import { isToday, isThisWeek, parseISO } from "date-fns";
 
 export default class TodoList {
     static selectedProject;

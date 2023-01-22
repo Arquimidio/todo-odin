@@ -106,6 +106,7 @@ input::placeholder {
   background-repeat: no-repeat;
 }
 
+
 .project-todos {
   display: flex;
   flex-direction: column;
