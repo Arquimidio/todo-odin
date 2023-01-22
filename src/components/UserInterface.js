@@ -30,13 +30,24 @@ export default class UserInterface {
         this.taskAdderContainer.firstChild?.remove();
     }
 
+    static makeAdder() {
+        const adderInput = document.createElement('input');
+        adderInput.setAttribute('placeholder', 'Add task');
+        return adderInput;
+    }
+
+    static makeAdderForm() {
+        const adderForm = document.createElement('form');
+        adderForm.classList.add('adder');
+        return adderForm;
+    }
+
     static renderTaskAdder() {
         this.removeTaskAdder();
-        const adderForm = document.createElement('form');
-        const adderInput = document.createElement('input');
-        adderInput.setAttribute('placeholder', 'Add task')
-        adderForm.classList.add('adder');
-        adderForm.append(adderInput);
+
+        const adderForm = this.makeAdderForm();
+        adderForm.append(this.makeAdder());
+
         this.taskAdderContainer.append(adderForm);
 
         return adderForm;
@@ -48,20 +59,27 @@ export default class UserInterface {
         return projectRemover;
     }
 
-    static renderProject(text, isRemovable = true) {
-        const projectContainer = document.createElement('li');
+    static projectContent(text) {
         const projectName = document.createElement('span');
         const projectIcon = document.createElement('i');
         const projectLeft = document.createElement('div');
 
-        projectContainer.classList.add('project');
         projectName.classList.add('project-title');
         projectIcon.classList.add('fa-solid', 'fa-folder');
-
         projectName.textContent = text;
-        
+
         projectLeft.append(projectIcon, projectName);
-        projectContainer.append(projectLeft);
+
+        return [projectLeft, projectName];
+    }
+
+    static renderProject(text, isRemovable = true) {
+        const projectContainer = document.createElement('li');
+        const [projectContentElement, projectName] = this.projectContent(text);
+
+        projectContainer.classList.add('project');
+        
+        projectContainer.append(projectContentElement);
         this.projectsDisplay.append(projectContainer)
 
         if(isRemovable) {
@@ -73,12 +91,12 @@ export default class UserInterface {
         }
     }
 
-    static renderTask(text, id, date='', parentProject, outProject) {
+    static renderTask(text, id, date='', parentProject, isOutProject) {
         const listItem = this.makeItem();
         const dateSelector = document.createElement('input');
         const taskText = document.createElement('span');
         
-        taskText.textContent = outProject? `${text} (${parentProject})` : text;
+        taskText.textContent = isOutProject? `${text} (${parentProject})` : text;
 
         dateSelector.setAttribute('type', 'date');
         dateSelector.setAttribute('value', date);
