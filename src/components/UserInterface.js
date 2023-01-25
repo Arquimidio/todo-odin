@@ -59,6 +59,12 @@ export default class UserInterface {
         return projectRemover;
     }
 
+    static makePrioritySelector(priorityValue) {
+        const priority = document.createElement('div');
+        priority.classList.add('priority', priorityValue);
+        return priority;
+    }
+
     static projectContent(text) {
         const projectName = document.createElement('span');
         const projectIcon = document.createElement('i');
@@ -91,8 +97,9 @@ export default class UserInterface {
         }
     }
 
-    static renderTask(text, id, date='', parentProject, isOutProject) {
+    static renderTask(text, id, date='', parentProject, isOutProject, priority = 'normal') {
         const listItem = this.makeItem();
+        const prioritySelector = this.makePrioritySelector(priority);
         const dateSelector = document.createElement('input');
         const taskText = document.createElement('span');
         
@@ -102,7 +109,7 @@ export default class UserInterface {
         dateSelector.setAttribute('value', date);
         dateSelector.classList.add('date-selector');
 
-        listItem.append(taskText, dateSelector);
+        listItem.append(taskText, prioritySelector, dateSelector);
         listItem.classList.add('task');
         listItem.dataset.id = id || '';
 

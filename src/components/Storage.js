@@ -1,5 +1,6 @@
 import Project from "./Project";
 import Task from "./Task";
+import Priority from "./Priority";
 
 const LIST_NAME = 'todoList';
 
@@ -25,7 +26,11 @@ export default class Storage {
     static initializeProject(proj) {
         const ProjectInstance = new Project(...Object.values(proj));
         const projectTasks = ProjectInstance.getTasks();
-        const initializedTasks = projectTasks.map(task => new Task(task))
+        const initializedTasks = projectTasks.map(task => {
+            const taskObj = new Task(task);
+            taskObj.priority = new Priority(task.priority);
+            return taskObj;
+        })
         ProjectInstance.setTodo(initializedTasks);
         return ProjectInstance;
     }
@@ -46,7 +51,13 @@ export default class Storage {
     static setList(list = new ProjectList()) {
         localStorage.setItem(
             LIST_NAME,
-            JSON.stringify(list)
+            JSON.stringify(list, (key, value) => {
+                if(value instanceof Priority) {
+                    return value.value;
+                } else {
+                    return value;
+                }
+            })
         )
     }
 }

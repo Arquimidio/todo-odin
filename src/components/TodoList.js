@@ -117,10 +117,20 @@ export default class TodoList {
             task.id,
             task.dueDate,
             task.parentProject,
-            outProject
+            outProject,
+            task.priority.value
         )
 
         const dateSelector = listItem.querySelector('.date-selector');
+        const prioritySelector = listItem.querySelector('.priority');
+
+        const updatePriority = () => {
+            const newTask = new Task(task);
+            console.log(newTask);
+            newTask.priority.update();
+            task.updateTask(newTask);
+            prioritySelector.className = `priority ${newTask.priority.value}`
+        }
 
         const updateDueDate = (event) => {
             const newTask = new Task(task);
@@ -129,6 +139,7 @@ export default class TodoList {
         }
 
         dateSelector.addEventListener('input', updateDueDate);
+        prioritySelector.addEventListener('click', updatePriority);
     }
 
     static submitProject(event) {

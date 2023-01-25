@@ -1,10 +1,12 @@
+import Priority from "./Priority";
+
 export default class Task {
     constructor({ 
         title, 
         id = '', 
         description = '', 
         dueDate='', 
-        priority='low', 
+        priority= new Priority('normal'), 
         parentProject 
     }) {
         this.title = title;

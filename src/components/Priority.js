@@ -15,12 +15,12 @@ export default class Priority {
     }
 
     get value() {
-        return this._priority;
+        return this._value;
     }
 
-    set value(value) {
-        if(Priority.isValid(value)) {
-            this._priority = value;
-        }
+    update() {
+        const curIndex = Priority.validPriorities.indexOf(this.value);
+        this._value = Priority.validPriorities[(curIndex + 1) % 3];
     }
+
 }

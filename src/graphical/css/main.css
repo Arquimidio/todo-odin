@@ -149,10 +149,33 @@ input::placeholder {
 }
 
 .task {
+  position: relative;
   padding: var(--base);
-  border-left: 5px solid var(--main-color);
   background-color: var(--task-light-blue);
   border-radius: var(--sub-base-x-small);
   display: flex;
   justify-content: space-between;
+  overflow: hidden;
 }
+
+.priority {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.priority.normal {
+  background-color: green;
+}
+
+.priority.medium {
+  background-color: rgb(255, 196, 0);
+}
+
+.priority.high {
+  background-color: red;
+}
+
