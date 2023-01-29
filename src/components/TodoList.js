@@ -113,20 +113,23 @@ export default class TodoList {
     static showTask(task, outProject = false) {
         const listItem = UserInterface.renderTask.call(
             UserInterface, 
-            task.title,
-            task.id,
-            task.dueDate,
-            task.parentProject,
-            outProject,
-            task.priority.value
+            task,
+            outProject
         )
 
         const dateSelector = listItem.querySelector('.date-selector');
         const prioritySelector = listItem.querySelector('.priority');
+        const doneToggler = listItem.querySelector('.done-toggler');
+
+        const updateStatus = () =>  {
+            const newTask = new Task(task);
+            newTask.done = !newTask.done;
+            console.log(newTask);
+            task.updateTask(newTask);
+        }
 
         const updatePriority = () => {
             const newTask = new Task(task);
-            console.log(newTask);
             newTask.priority.update();
             task.updateTask(newTask);
             prioritySelector.className = `priority ${newTask.priority.value}`
@@ -140,6 +143,7 @@ export default class TodoList {
 
         dateSelector.addEventListener('input', updateDueDate);
         prioritySelector.addEventListener('click', updatePriority);
+        doneToggler.addEventListener('input', updateStatus);
     }
 
     static submitProject(event) {

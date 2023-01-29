@@ -7,7 +7,8 @@ export default class Task {
         description = '', 
         dueDate='', 
         priority= new Priority('normal'), 
-        parentProject 
+        parentProject,
+        done=false 
     }) {
         this.title = title;
         this.description = description;
@@ -15,6 +16,7 @@ export default class Task {
         this.id = id;
         this.parentProject = parentProject;
         this.priority = priority;
+        this.done = done;
     }
 
     updateTask(editedTask) {

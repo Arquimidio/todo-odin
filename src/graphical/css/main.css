@@ -179,3 +179,13 @@ input::placeholder {
   background-color: red;
 }
 
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sub-base-x-small);
+}
+
+.task-left input:checked + span {
+  text-decoration: line-through;
+}
+

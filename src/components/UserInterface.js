@@ -42,6 +42,14 @@ export default class UserInterface {
         return adderForm;
     }
 
+    static makeDoneToggler(taskStatus) {
+        const toggler = document.createElement('input');
+        toggler.setAttribute('type', 'checkbox');
+        taskStatus && toggler.setAttribute('checked', taskStatus);
+        toggler.classList.add('done-toggler');
+        return toggler;
+    }
+
     static renderTaskAdder() {
         this.removeTaskAdder();
 
@@ -97,21 +105,25 @@ export default class UserInterface {
         }
     }
 
-    static renderTask(text, id, date='', parentProject, isOutProject, priority = 'normal') {
+    static renderTask(task, isOutProject) {
         const listItem = this.makeItem();
-        const prioritySelector = this.makePrioritySelector(priority);
+        const prioritySelector = this.makePrioritySelector(task.priority.value);
+        const doneToggler = this.makeDoneToggler(task.done);
         const dateSelector = document.createElement('input');
         const taskText = document.createElement('span');
+        const taskLeft = document.createElement('div');
         
-        taskText.textContent = isOutProject? `${text} (${parentProject})` : text;
+        taskText.textContent = isOutProject? `${task.title} (${task.parentProject})` : task.title;
 
         dateSelector.setAttribute('type', 'date');
-        dateSelector.setAttribute('value', date);
+        dateSelector.setAttribute('value', task.dueDate);
         dateSelector.classList.add('date-selector');
+        taskLeft.classList.add('task-left')
 
-        listItem.append(taskText, prioritySelector, dateSelector);
+        taskLeft.append(doneToggler, taskText);
+        listItem.append(taskLeft, prioritySelector, dateSelector);
         listItem.classList.add('task');
-        listItem.dataset.id = id || '';
+        listItem.dataset.id = task.id || '';
 
         this.todoDisplay.append(listItem);
         return listItem;
