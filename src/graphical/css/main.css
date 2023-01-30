@@ -37,6 +37,10 @@ nav {
   max-height: 100vh;
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 form {
   display: flex;
 }
