@@ -5,7 +5,7 @@ export default class Task {
         title, 
         id = '', 
         description = '', 
-        dueDate='', 
+        dueDate=new Date().toISOString().split('T')[0], 
         priority= new Priority('normal'), 
         parentProject,
         done=false 

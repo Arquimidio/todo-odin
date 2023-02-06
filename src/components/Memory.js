@@ -1,3 +1,4 @@
+import Project from "./Project";
 import Storage from "./Storage";
 
 export default class Memory {
@@ -56,6 +57,9 @@ export default class Memory {
     }
 
     static saveToStorage() {
+        this.list.projects.forEach(proj => {
+            proj.todo = proj.todo.filter(task => !task.done)
+        })
         Storage.setList(this.list);
     }
 }

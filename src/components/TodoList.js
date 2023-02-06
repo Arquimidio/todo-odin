@@ -166,8 +166,12 @@ export default class TodoList {
         const { target: { firstChild: input } } = event;
         const project = Memory.getProject(targetProjectName);
         const newTaskId = uuidv4();
-        const newTask = new Task({ title: input.value, id: newTaskId, parentProject: project.getName()});
-        
+        const newTask = new Task({ 
+            title: input.value, 
+            id: newTaskId, 
+            parentProject: project.getName(),
+        });
+        console.log(newTask);
         this.showTask(newTask);
         project.setTask(newTask);
         event.target.reset();
